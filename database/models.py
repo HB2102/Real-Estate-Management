@@ -32,6 +32,8 @@ class Notice(Base):
     is_available = Column(Boolean)
     created_at = Column(DateTime)
     unavailable_date = Column(DateTime)
+    bargain_type_id = Column(Integer, ForeignKey('bargain_type.id'))
+    asset_type_id = Column(Integer, ForeignKey('asset_type.id'))
 
 
 # NOTICE PICTURE TABLE ============================================================================================
@@ -41,11 +43,24 @@ class NoticePicture(Base):
     picture_path = Column(String)
 
 
+# ASSET TYPE ============================================================================================
+class AssetType(Base):
+    __tablename__ = 'asset_type'
+    id = Column(Integer, index=True, primary_key=True)
+    asset_type = Column(String)
+
+
+# BARGAIN TYPE ============================================================================================
+class BargainType(Base):
+    __tablename__ = 'bargain_type'
+    id = Column(Integer, index=True, primary_key=True)
+    bargain_type = Column(String)
+
+
 # REGION TABLE ============================================================================================
 class Region(Base):
     __tablename__ = 'region'
     id = Column(Integer, index=True, primary_key=True)
-    notice_id = Column(Integer, ForeignKey('notice.id'))
     region_name = Column(String)
 
 
