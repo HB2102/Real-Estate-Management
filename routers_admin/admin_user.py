@@ -14,3 +14,8 @@ router = APIRouter(
 @router.post('/create_user', response_model=AdminUserDisplay)
 def create_user(request: UserBase, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
     return db_user.admin_create_user(request, db, admin.id)
+
+
+@router.delete('/delete_user')
+def admin_delete_user(user_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_delete_user(user_id, db, admin.id)
