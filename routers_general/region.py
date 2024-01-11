@@ -8,6 +8,7 @@ from typing import List
 
 router = APIRouter(prefix='/region', tags=['Region'])
 
+
 @router.get('/region_by_id', response_model=RegionDisplay)
 def get_region_by_id(id: int, db: Session = Depends(get_db)):
     return db_region.get_region_by_id(id, db)
@@ -16,4 +17,3 @@ def get_region_by_id(id: int, db: Session = Depends(get_db)):
 @router.get('/region_all', response_model=List[RegionDisplay])
 def get_all_regions(db: Session = Depends(get_db)):
     return db_region.get_all_regions(db)
-

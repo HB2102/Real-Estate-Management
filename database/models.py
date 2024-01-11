@@ -61,7 +61,7 @@ class BargainType(Base):
 class Region(Base):
     __tablename__ = 'region'
     id = Column(Integer, index=True, primary_key=True)
-    region_name = Column(String)
+    region_name = Column(String, unique=True)
 
 
 # CITY TABLE ============================================================================================

@@ -62,3 +62,11 @@ class RegionDisplay(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CityDisplay(BaseModel):
+    id: int
+    city_name: str
+
+    class Config:
+        from_attributes = True
