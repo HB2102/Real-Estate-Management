@@ -17,6 +17,8 @@ class UserBase(BaseModel):
     street_address: str
 
 
+
+
 class UserDisplay(BaseModel):
     full_name: str
     email: Optional[str]

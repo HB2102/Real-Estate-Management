@@ -16,6 +16,35 @@ def create_user(request: UserBase, db: Session = Depends(get_db), admin: UserAut
     return db_user.admin_create_user(request, db, admin.id)
 
 
+@router.get('/get_user/{user_id}')
+def admin_get_user(user_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_get_user(user_id, db, admin.id)
+
+
+@router.get('/get_all_users')
+def admin_get_all_users(db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_get_all_users(db, admin.id)
+
+
+@router.get('/get_user_by_username/{username}')
+def admin_get_user_by_username(username: str, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_get_user_by_username(username, db, admin.id)
+
+@router.get('/get_user_by_name/{full_name}')
+def admin_get_user_by_full_name(full_name: str, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_get_user_by_full_name(full_name, db, admin.id)
+
+
+@router.get('/get_users_by_city')
+def admin_get_users_by_city(city_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_get_user_by_city(city_id, db, admin.id)
+
+
+@router.get('/get_users_by_region')
+def admin_get_users_by_region(region_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_user.admin_get_user_by_region(region_id, db, admin.id)
+
+
 @router.delete('/delete_user')
 def admin_delete_user(user_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
     return db_user.admin_delete_user(user_id, db, admin.id)

@@ -15,3 +15,13 @@ router = APIRouter(
 @router.get('/admin_get_notice/{id}')
 def admin_get_notice(id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
     return db_notice.admin_get_notice(id, db, admin.id)
+
+
+@router.get('/get_notice_user')
+def admin_get_notice_user(notice_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_notice.admin_get_notice_user(notice_id, db, admin.id)
+
+
+@router.delete('/delete_notice')
+def admin_delete_notice(notice_id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+    return db_notice.admin_delete_notice(notice_id, db, admin.id)

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import and_
 from database.hash import Hash
 from fastapi.exceptions import HTTPException
+from database_functions import db_user
 from fastapi import status
 import datetime
 
@@ -546,3 +547,112 @@ def get_notice_info(notice_id: int, db: Session):
     }
 
     return user_display
+
+
+def admin_delete_notice(notice_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notice = db.query(Notice).filter(Notice.id == notice_id).first()
+    if not notice:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    db.delete(notice)
+    db.commit()
+
+    return 'Notice deleted'
+
+
+def user_update_notice(notice_id: int, request: NoticeBase, db: Session, user_id: int):
+    notice = db.query(Notice).filter(Notice.id == notice_id).first()
+    if not notice:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    if notice.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='You are not authorized to change this notice info.')
+
+    notice.title = request.title
+    notice.region_id = request.region_id
+    notice.city_id = request.city_id
+    notice.substruction = request.substruction
+    notice.propertyـsize = request.propertyـsize
+    notice.number_of_floors = request.number_of_floors
+    notice.number_of_house_units = request.number_of_house_units
+    notice.floor = request.floor
+    notice.room_number = request.room_number
+    notice.area = request.area
+    notice.neighbourhood = request.neighbourhood
+    notice.address = request.address
+    notice.prepayment = request.prepayment
+    notice.price = request.price
+    notice.description = request.description
+    notice.asset_type_id = request.asset_type_id
+    notice.bargain_type_id = request.bargain_type_id
+
+    db.commit()
+
+    return real_estate_show_notice(notice_id, db)
+
+
+def user_delete_notice(notice_id: int, db: Session, user_id: int):
+    notice = db.query(Notice).filter(Notice.id == notice_id).first()
+    if not notice:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    if notice.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='You are not authorized to delete this notice.')
+
+    db.delete(notice)
+    db.commit()
+
+    return 'Notice deleted'
+
+
+def real_estate_get_notice_by_id_for_real_estate(id_for_real_estate: int, db: Session, user_id: int):
+    notice = db.query(Notice).filter(and_(Notice.id_for_real_estate == id_for_real_estate, Notice.user_id == user_id)).first()
+    if not notice:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice found')
+
+    return real_estate_show_notice(notice.id, db)
+
+
+def make_notice_unavailable(notice_id: int, db: Session, user_id: int):
+    notice = db.query(Notice).filter(Notice.id == notice_id).first()
+    if not notice:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    if notice.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='You are not authorized to delete this notice.')
+
+    notice.is_available = False
+    db.commit()
+
+    return "Notice is unavailable from now on."
+
+# ============================================================================================================
+# ============================================================================================================
+# ============================================================================================================
+# ============================================================================================================
+
+def admin_get_notice_user(notice_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notice = db.query(Notice).filter(Notice.id == notice_id).first()
+    if not notice:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    return db_user.admin_show_user(notice.user_id, db)
+
+

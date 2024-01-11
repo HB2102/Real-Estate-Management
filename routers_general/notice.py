@@ -112,3 +112,24 @@ def get_all_notices_by_city_bargain_type_asset_type(city_id: int, bargain_type_i
 def get_notice_info(notice_id: int, db: Session = Depends(get_db)):
     return db_notice.get_notice_info(notice_id, db)
 
+
+@router.get('/get_notice_by_id_for_real_estate/{id}')
+def real_estate_get_notice_by_id_for_real_estate(id_for_real_estate: int, db: Session = Depends(get_db), user: UserAuth = Depends(auth.get_current_user)):
+    return db_notice.real_estate_get_notice_by_id_for_real_estate(id_for_real_estate, db, user.id)
+
+
+
+@router.put('/update_notice_info')
+def real_estate_update_notice_info(notice_id: int, request: NoticeBase, db: Session = Depends(get_db), user: UserAuth = Depends(auth.get_current_user)):
+    return db_notice.user_update_notice(notice_id, request, db, user.id)
+
+
+@router.put('/make_unavailable/{id}')
+def make_notice_unavailable(notice_id: int, db: Session = Depends(get_db), user: UserAuth = Depends(auth.get_current_user)):
+    return db_notice.make_notice_unavailable(notice_id, db, user.id)
+
+
+@router.delete('/delete_notice')
+def real_estate_delete_notice(notice_id: int, db: Session = Depends(get_db), user: UserAuth = Depends(auth.get_current_user)):
+    return db_notice.user_delete_notice(notice_id, db, user.id)
+
