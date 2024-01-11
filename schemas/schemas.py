@@ -78,3 +78,11 @@ class AssetTypeDisplay(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class BargainTypeDisplay(BaseModel):
+    id: int
+    bargain_type: str
+
+    class Config:
+        from_attributes = True

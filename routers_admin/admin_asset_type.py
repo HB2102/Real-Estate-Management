@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post('/add_asset_type', response_model=AssetTypeDisplay)
-def admin_add_city(name: str, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+def admin_add_asset_type(name: str, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
     return db_asset_type.admin_add_asset_type(name, db, admin.id)
 
 
@@ -22,6 +22,6 @@ def admin_update_asset_type(id: int, name: str, db: Session = Depends(get_db), a
     return db_asset_type.admin_update_asset_type(id, name, db, admin.id)
 
 
-@router.delete('delete_city/{id}')
+@router.delete('/delete_asset_type/{id}')
 def admin_delete_asset_type(id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
     return db_asset_type.admin_delete_asset_type(id, db, admin.id)
