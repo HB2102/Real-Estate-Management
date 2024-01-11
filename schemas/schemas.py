@@ -70,3 +70,11 @@ class CityDisplay(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class AssetTypeDisplay(BaseModel):
+    id: int
+    asset_type: str
+
+    class Config:
+        from_attributes = True

@@ -9,7 +9,7 @@ from typing import List
 router = APIRouter(prefix='/city', tags=['City'])
 
 
-@router.get('/cuty_by_id', response_model=CityDisplay)
+@router.get('/city_by_id', response_model=CityDisplay)
 def get_city_by_id(id: int, db: Session = Depends(get_db)):
     return db_city.get_city_by_id(id, db)
 

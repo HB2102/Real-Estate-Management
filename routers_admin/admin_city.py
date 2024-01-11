@@ -23,7 +23,7 @@ def admin_update_city(id: int, name: str, db: Session = Depends(get_db), admin: 
 
 
 @router.delete('delete_city/{id}')
-def admin_delete_region(id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
+def admin_delete_city(id: int, db: Session = Depends(get_db), admin: UserAuth = Depends(auth.get_current_user_admin)):
     return db_city.admin_delete_city(id, db, admin.id)
 
 
