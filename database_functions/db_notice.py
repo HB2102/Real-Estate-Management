@@ -1,8 +1,7 @@
 from database.models import User, Region, City, Notice
-from schemas.schemas import UserBase, NoticeBase
+from schemas.schemas import NoticeBase
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import and_
-from database.hash import Hash
 from fastapi.exceptions import HTTPException
 from database_functions import db_user
 from fastapi import status
@@ -45,7 +44,7 @@ def create_notice(request: NoticeBase, db: Session, user_id: int):
     db.add(notice)
     db.commit()
 
-    return notice
+    return real_estate_show_notice(notice.id, db)
 
 
 def show_notice(notice_id: int, db: Session):
@@ -656,3 +655,274 @@ def admin_get_notice_user(notice_id: int, db: Session, admin_id: int):
     return db_user.admin_show_user(notice.user_id, db)
 
 
+def admin_get_all_notices(db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+
+    notices = db.query(Notice).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_region(region_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+
+    notices = db.query(Notice).filter(Notice.region_id == region_id).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_city(city_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(Notice.city_id == city_id).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_asset_type(asset_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+
+    notices = db.query(Notice).filter(Notice.asset_type_id == asset_type_id).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+def admin_get_all_notices_by_bargain_type(bargain_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(Notice.bargain_type_id == bargain_type_id).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+# ============================================================================================================
+# ============================================================================================================
+# ============================================================================================================
+# ============================================================================================================
+
+def admin_get_all_notices_by_region_bargain_type(region_id: int, bargain_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(and_(Notice.region_id == region_id, Notice.bargain_type_id == bargain_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_city_bargain_type(city_id: int, bargain_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+
+    notices = db.query(Notice).filter(and_(Notice.city_id == city_id, Notice.bargain_type_id == bargain_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_region_asset_type(region_id: int, asset_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(and_(Notice.region_id == region_id, Notice.asset_type_id == asset_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_city_asset_type(city_id: int, asset_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+
+    notices = db.query(Notice).filter(and_(Notice.city_id == city_id, Notice.asset_type_id == asset_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_bargain_type_asset_type(bargain_type_id: int, asset_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(and_(Notice.bargain_type_id == bargain_type_id, Notice.asset_type_id == asset_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_region_bargain_type_asset_type(region_id: int, bargain_type_id: int, asset_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(and_(Notice.region_id == region_id, Notice.bargain_type_id == bargain_type_id, Notice.asset_type_id == asset_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display
+
+
+def admin_get_all_notices_by_city_bargain_type_asset_type(city_id: int, bargain_type_id: int, asset_type_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    notices = db.query(Notice).filter(and_(Notice.city_id == city_id, Notice.bargain_type_id == bargain_type_id, Notice.asset_type_id == asset_type_id)).all()
+    if not notices:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Notice not found')
+
+    display = []
+    for notice in notices:
+        if notice.is_available == True:
+            display.append(admin_show_notice(notice.id, db))
+
+    if not display:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='No notice was found')
+
+    return display

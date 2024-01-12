@@ -1,5 +1,5 @@
 from database.database import Base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Float
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 
 
 # USER TABLE ============================================================================================
@@ -51,6 +51,7 @@ class Notice(Base):
 class NoticePicture(Base):
     __tablename__ = 'notice_picture'
     id = Column(Integer, index=True, primary_key=True)
+    notice_id = Column(Integer, ForeignKey('notice.id'))
     picture_path = Column(String)
 
 

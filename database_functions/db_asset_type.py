@@ -1,8 +1,5 @@
-from database.models import User, Region, City, AssetType
-from schemas.schemas import UserBase
+from database.models import User, AssetType
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import and_
-from database.hash import Hash
 from fastapi.exceptions import HTTPException
 from fastapi import status
 

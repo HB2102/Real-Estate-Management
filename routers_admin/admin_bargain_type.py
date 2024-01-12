@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends
-from schemas.schemas import AdminUserDisplay, UserAuth, BargainTypeDisplay
+from schemas.schemas import UserAuth, BargainTypeDisplay
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database_functions import db_bargain_type
 from authentication import auth
-from typing import List
 
 router = APIRouter(
     tags=['Admin Bargain Type'],

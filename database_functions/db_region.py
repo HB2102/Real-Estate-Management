@@ -1,7 +1,5 @@
-from database.models import User, Region, City
-from schemas.schemas import UserBase
+from database.models import User, Region
 from sqlalchemy.orm import Session
-from database.hash import Hash
 from fastapi.exceptions import HTTPException
 from fastapi import status
 

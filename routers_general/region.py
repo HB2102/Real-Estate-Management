@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
-from schemas.schemas import UserDisplay, RegionDisplay, UserAuth
+from schemas.schemas import RegionDisplay
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database_functions import db_region
-from authentication import auth
 from typing import List
 
 router = APIRouter(prefix='/region', tags=['Region'])

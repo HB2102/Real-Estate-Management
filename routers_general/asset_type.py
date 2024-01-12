@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
-from schemas.schemas import UserDisplay, CityDisplay, UserAuth, AssetTypeDisplay
+from schemas.schemas import AssetTypeDisplay
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database_functions import db_asset_type
-from authentication import auth
 from typing import List
 
 router = APIRouter(prefix='/asset_type', tags=['Asset Type'])

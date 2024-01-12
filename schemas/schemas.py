@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from fastapi import Query
 from typing import Optional
 import datetime
 
@@ -25,8 +24,8 @@ class UserDisplay(BaseModel):
     phone_number: str
     real_estate_name: str
     phone: str
-    region_name_id: Optional[int]
-    city_name_id: Optional[int]
+    region_id: Optional[int]
+    city_id: Optional[int]
     street_address: str
 
     class Config:

@@ -283,3 +283,19 @@ def admin_get_user_by_region(region_id: int, db: Session, admin_id: int):
 
     return display
 
+
+def promotr_to_admin(user_id: int, db: Session, admin_id: int):
+    admin = db.query(User).filter(User.id == admin_id).first()
+
+    if admin.is_admin == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    try:
+        user.is_admin = True
+        db.commit()
+        return 'User promoted to admin'
+
+    except:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
